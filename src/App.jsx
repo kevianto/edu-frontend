@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignIn from "./pages/signin";
 import SignUp from "./pages/Signup";
 import Home from "./pages/Home";
-import ManageBlogs from "./pages/Manageblogs";
+import ManageBlogs from "./pages/ManageBlogs";
 
 
 function App() {
