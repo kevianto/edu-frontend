@@ -33,7 +33,7 @@ const SignIn = () => {
   };
 
   const SignInForm = (
-    <div className="w-full h-full bg-white flex flex-col items-center justify-center p-6 max-w-md mx-auto">
+    <div className="w-full h-full bg-white flex flex-col items-center justify-center p-6 max-w-md m-3">
       <h2 className="text-2xl font-bold">Sign In</h2>
       <p className="text-sm mt-2">Use your email and password</p>
       {error && <p className="text-red-500 text-sm">{error}</p>}

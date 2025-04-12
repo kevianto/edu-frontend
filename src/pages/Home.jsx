@@ -107,8 +107,8 @@ const Home = () => {
           )}
         </div>
 
-        {/* Trending stories section - 30% */}
-        <div className="w-full md:w-[30%] border rounded-lg shadow p-4 h-fit sticky top-4">
+        {/* Trending stories section - hidden on small screens */}
+        <div className="hidden md:block md:w-[30%] border rounded-lg shadow p-4 h-fit sticky top-4">
           <h3 className="text-lg font-bold text-orange-600 mb-4">
             TRENDING NOW
           </h3>
