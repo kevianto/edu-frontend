@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import BlogForm from "../components/BlogForm"; // Adjust the path based on your folder structure
+import BlogForm from "../components/BlogForm"; // Adjust the path if needed
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -42,60 +42,40 @@ const ManageBlogs = () => {
     }
   };
 
-  const uploadImage = async (file) => {
-    const cloudName = "daxghemr4";
-    const uploadPreset =
-      "system_uploader_1e2ddab171f769b9_cad99bc8ef0968685f81cc25a118dfff9c";
-
-    const imageData = new FormData();
-    imageData.append("file", file);
-    imageData.append("upload_preset", uploadPreset);
-
-    try {
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        imageData
-      );
-      return data.secure_url;
-    } catch (error) {
-      setMessage({ type: "error", text: "Error uploading image" });
-      return null;
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let imageUrl = formData.image;
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("description", formData.description);
+
+    // Only append image if it's a new file
     if (formData.image && typeof formData.image !== "string") {
-      imageUrl = await uploadImage(formData.image);
-      if (!imageUrl) return;
+      formDataToSend.append("image", formData.image);
     }
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
       const url = editingBlog
         ? `${API_URL}/blog/${editingBlog._id}`
         : `${API_URL}/blog`;
 
       const method = editingBlog ? "put" : "post";
 
-      const { data } = await axios[method](
+      const { data } = await axios({
+        method,
         url,
-        {
-          title: formData.title,
-          description: formData.description,
-          image: imageUrl,
+        data: formDataToSend,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      });
 
       setMessage({ type: "success", text: data.message });
       setFormData({ title: "", description: "", image: null });
